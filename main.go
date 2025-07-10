@@ -77,7 +77,7 @@ func main() {
 }
 
 func getTodos(c *fiber.Ctx) error {
-	var todos []Todo
+	todos := []Todo{}
 
 	cursor, err := collection.Find(context.Background(), bson.M{})
 
