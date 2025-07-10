@@ -11,7 +11,7 @@ import (
 )
 
 type Todo struct {
-	ID        int    `json:"id"`
+	ID        int    `json:"_id"`
 	Completed bool   `json:"completed"`
 	Body      string `json:"body"`
 }
