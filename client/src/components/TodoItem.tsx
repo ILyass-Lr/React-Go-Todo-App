@@ -79,7 +79,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 			</Flex>
 			<Flex gap={2} alignItems={"center"}>
 			  <Box color={"green.500"} cursor={"pointer"} onClick={() => updateTodo()}>
-			    {isUpdating ? <Spinner size={"md"} /> : <FaCheckCircle size={30} />}
+			    {isUpdating ? <Spinner size={"sm"} /> : <FaCheckCircle size={30} />}
 			  </Box>
 
 			  <Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
