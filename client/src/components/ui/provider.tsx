@@ -1,17 +1,17 @@
-// src/components/ui/provider.tsx
-// src/components/ui/provider.tsx
-"use client";
+"use client"
 
-import { ChakraProvider } from "@chakra-ui/react";
-import { ColorModeProvider } from "@/components/ui/color-mode";
 import { system } from "@/theme";
+import { ChakraProvider } from "@chakra-ui/react";
+import { ColorModeProvider, type ColorModeProviderProps } from "@/components/ui/color-mode";
 
-export function Provider(props: ColorModeProviderProps) {
+export function Provider({ children, ...props }: ColorModeProviderProps) {
   return (
     <ChakraProvider value={system}>
-      <ColorModeProvider {...props} />
+      <ColorModeProvider {...props}>
+        {children}
+      </ColorModeProvider>
     </ChakraProvider>
-  );
+  )
 }
 
 

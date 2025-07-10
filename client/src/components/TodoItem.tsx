@@ -2,7 +2,8 @@ import { Badge, Box, Flex, Text, Spinner } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { BASE_URL } from "@/App.tsx"; 
+import { type Todo } from "./TodoList";
+import { BASE_URL } from "@/App"; 
 const TodoItem = ({ todo }: { todo: Todo }) => {
 	console.log(todo);
 	const queryClient = useQueryClient();
@@ -78,11 +79,11 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 			</Flex>
 			<Flex gap={2} alignItems={"center"}>
 				<Box color={"green.500"} cursor={"pointer"} onClick={() => updateTodo()}>
-					{isUpdating ? <Spinner size={25} /> : <FaCheckCircle size={25} />}
+					{isUpdating ? <Spinner size={"md"} /> : <FaCheckCircle size={"md"} />}
 				</Box>
 
 				<Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
-					{isDeleting ?  <Spinner size={25} /> : <MdDelete size={25} />}
+					{isDeleting ?  <Spinner size={"md"} /> : <MdDelete size={"md"} />}
 				</Box>
 			</Flex>
 		</Flex>

@@ -20,8 +20,7 @@ const TodoList = () => {
 		queryFn: async () => {
 				const res = await fetch(`${BASE_URL}/api/todos`)
 				if (!res.ok){
-					const errorData = await res.json();
-					throw new Error(data.error || "Failed to fetch todos");
+					throw new Error("Failed to fetch todos");
 				}
 				return res.json();
 	},
