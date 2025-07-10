@@ -72,7 +72,7 @@ const TodoForm = () => {
 						transform: "scale(.97)",
 					}}
 				>
-					{isCreating ? <Spinner size={"xs"} /> : <IoMdAdd size={"md"} />}
+					{isCreating ? <Spinner size={"md"} /> : <IoMdAdd size={"md"} />}
 				</Button>
 			</Flex>
 		</form>
