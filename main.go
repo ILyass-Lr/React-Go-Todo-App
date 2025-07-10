@@ -66,14 +66,14 @@ func main() {
 
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = ":5000"
+		port = "5000"
 	}
 
 	if os.Getenv("ENV") == "production" {
 		app.Static("/", "./client/dist")
 	}
 
-	log.Fatal(app.Listen("0.0.0.0" + port))
+	log.Fatal(app.Listen("0.0.0.0:" + port))
 }
 
 func getTodos(c *fiber.Ctx) error {
