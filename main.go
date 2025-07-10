@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -24,9 +25,9 @@ var collection *mongo.Collection
 func main() {
 	if os.Getenv("ENV") != "production" {
 		// Load the .env file if not in production
-		err := godotenv.Load(".env")
+		err := godotenv.Load()
 		if err != nil {
-			log.Fatal("Error loading .env file:", err)
+			log.Fatal("Error loading .env file:")
 		}
 	}
 	// Connecto to Mongo DB Atlas
@@ -51,10 +52,12 @@ func main() {
 
 	app := fiber.New()
 
-	// app.Use(cors.New(cors.Config{
-	// 	AllowOrigins: "http://localhost:5173",
-	// 	AllowHeaders: "Origin,Content-Type,Accept",
-	// }))
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "http://localhost:5173",
+		AllowMethods:     "GET,POST,DELETE,PATCH,OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: true,
+	}))
 
 	app.Get("/api/todos", getTodos)
 	app.Post("/api/todos", createTodo)
@@ -66,9 +69,13 @@ func main() {
 		port = ":5000"
 	}
 
-	log.Fatal(app.Listen("0.0.0.0" + port))
+	if os.Getenv("ENV") == "production" {
+		app.Static("/", "./client/dist")
+	}
 
+	log.Fatal(app.Listen("0.0.0.0" + port))
 }
+
 func getTodos(c *fiber.Ctx) error {
 	var todos []Todo
 
@@ -93,7 +100,6 @@ func getTodos(c *fiber.Ctx) error {
 
 func createTodo(c *fiber.Ctx) error {
 	todo := new(Todo)
-	// {id:0,completed:false,body:""}
 
 	if err := c.BodyParser(todo); err != nil {
 		return err
@@ -118,6 +124,7 @@ func updateTodo(c *fiber.Ctx) error {
 
 	objectID, err := bson.ObjectIDFromHex(id)
 	if err != nil {
+		log.Printf("[updateTodo] Invalid ID format: %s", id)
 		return c.Status(400).JSON(fiber.Map{"error": "Invalid todo ID"})
 	}
 
@@ -126,11 +133,13 @@ func updateTodo(c *fiber.Ctx) error {
 
 	result, err := collection.UpdateOne(context.Background(), filter, update)
 	if err != nil {
-		return err
+		log.Printf("[updateTodo] Database error : %v", err)
+		return c.Status(500).JSON(fiber.Map{"error": "Database update failed"})
 	}
 
 	// Check if any document was actually updated
 	if result.MatchedCount == 0 {
+		log.Printf("[updateTodo] No document found with ID: %s", id)
 		return c.Status(404).JSON(fiber.Map{"error": "Todo not found"})
 	}
 
@@ -150,7 +159,7 @@ func deleteTodo(c *fiber.Ctx) error {
 
 	result, err := collection.DeleteOne(context.Background(), filter)
 	if err != nil {
-		return err
+		return c.Status(500).JSON(fiber.Map{"error": "Delete operation failed"})
 	}
 
 	// Check if any document was actually deleted
