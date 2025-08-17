@@ -72,9 +72,6 @@ A feature-rich Todo application that combines the power of React's dynamic UI wi
 
 ## 🚀 Deployment
 
-### 🌐 Live Demo
-[🔗 View Live Application](https://react-go-todo-app-production.up.railway.app/)
-
 ### 📋 Environment Configuration
 Create a .env file in the root directory:
 ```
